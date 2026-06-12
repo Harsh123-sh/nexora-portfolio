@@ -1,0 +1,12 @@
+{
+  "name": "nexora-contact-system",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Nexora portfolio contact lead system with Express, PostgreSQL, Nodemailer, and React admin dashboard.",
+  "scripts": {
+    "install:all": "npm install --prefix server && npm install --prefix admin",
+    "dev": "npm run dev --prefix server",
+    "build:admin": "npm run build --prefix admin",
+    "start": "npm start --prefix server"
+  }
+}
