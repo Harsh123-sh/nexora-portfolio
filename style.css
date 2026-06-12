@@ -3122,35 +3122,89 @@ body.gallery-mode {
     color: var(--text);
 }
 
-.qr-placeholder {
+.portfolio-qr-card {
     background:
-        linear-gradient(145deg, var(--panel-strong), var(--panel));
+        linear-gradient(145deg, var(--panel-strong), var(--panel)),
+        radial-gradient(circle at 14% 8%, rgba(6, 182, 212, 0.14), transparent 18rem);
     border: 1px solid var(--border);
+    border-radius: 24px;
+    box-shadow: var(--shadow);
+    display: grid;
+    gap: 18px;
+    margin-top: 28px;
+    max-width: 420px;
+    padding: clamp(20px, 2.6vw, 28px);
+}
+
+.portfolio-qr-copy h3 {
+    color: var(--text);
+    font-size: clamp(1.35rem, 2.4vw, 1.9rem);
+    letter-spacing: 0;
+}
+
+.portfolio-qr-copy p:last-child {
+    font-size: 0.96rem;
+    margin-top: 10px;
+}
+
+.portfolio-qr-frame {
+    align-items: center;
+    background:
+        linear-gradient(145deg, rgba(255, 255, 255, 0.96), rgba(232, 241, 255, 0.92));
+    border: 1px solid rgba(255, 255, 255, 0.42);
     border-radius: 22px;
+    display: flex;
+    justify-content: center;
+    justify-self: center;
+    padding: 14px;
+    width: min(100%, 248px);
+}
+
+.portfolio-qr-frame img {
+    border-radius: 14px;
+    height: clamp(180px, 22vw, 220px);
+    object-fit: contain;
+    width: clamp(180px, 22vw, 220px);
+}
+
+.portfolio-qr-actions {
     display: grid;
     gap: 10px;
-    grid-template-columns: repeat(2, 42px) 1fr;
-    margin-top: 28px;
-    max-width: 360px;
-    padding: 18px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
-.qr-placeholder span {
-    background: var(--text);
-    border-radius: 7px;
-    height: 42px;
+.portfolio-qr-actions a {
+    align-items: center;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    color: var(--text);
+    display: inline-flex;
+    font-size: 0.78rem;
+    font-weight: 900;
+    justify-content: center;
+    min-height: 42px;
+    padding: 0 12px;
+    text-align: center;
+    transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease, background 0.22s ease;
 }
 
-.qr-placeholder span:nth-child(2),
-.qr-placeholder span:nth-child(3) {
-    opacity: 0.42;
+.portfolio-qr-actions a:hover,
+.portfolio-qr-actions a:focus-visible {
+    background: rgba(6, 182, 212, 0.13);
+    border-color: rgba(6, 182, 212, 0.68);
+    box-shadow: 0 16px 38px rgba(6, 182, 212, 0.16);
+    transform: translateY(-2px);
 }
 
-.qr-placeholder strong {
-    align-self: center;
-    color: var(--muted);
-    font-size: 0.86rem;
-    grid-row: span 2;
+body.light-mode .portfolio-qr-card {
+    background:
+        linear-gradient(145deg, rgba(255, 255, 255, 0.94), rgba(239, 245, 255, 0.82)),
+        radial-gradient(circle at 14% 8%, rgba(37, 99, 235, 0.11), transparent 18rem);
+}
+
+body.light-mode .portfolio-qr-actions a {
+    background: rgba(255, 255, 255, 0.74);
 }
 
 .contact-form {
@@ -5208,7 +5262,7 @@ h2 {
 }
 
 .contact-details,
-.qr-placeholder {
+.portfolio-qr-card {
     margin-top: 20px;
 }
 
@@ -5257,5 +5311,13 @@ h2 {
 
     .gallery-bottom-actions .btn {
         width: 100%;
+    }
+
+    .portfolio-qr-card {
+        max-width: none;
+    }
+
+    .portfolio-qr-actions {
+        grid-template-columns: 1fr;
     }
 }
