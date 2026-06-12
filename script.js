@@ -559,11 +559,11 @@ const navigateHomeToProjects = () => {
     });
 
     try {
-        history.pushState(null, "", "/");
+        history.pushState(null, "", `${window.location.pathname}${window.location.search}`);
         const projectsSection = document.querySelector("#projects");
 
         if (!projectsSection) {
-            window.location.assign("/");
+            window.location.hash = "projects";
             return;
         }
 
@@ -575,7 +575,7 @@ const navigateHomeToProjects = () => {
             }
         });
     } catch (error) {
-        window.location.assign("/#projects");
+        window.location.hash = "projects";
     }
 };
 
