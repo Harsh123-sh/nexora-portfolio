@@ -4039,6 +4039,19 @@ body.light-mode.case-study-mode .project-panel h2 {
     z-index: 120;
 }
 
+.project-section > .gallery-back,
+.case-back,
+.apple-back {
+    left: max(24px, calc((100vw - 1240px) / 2));
+    position: fixed;
+    top: 96px;
+    z-index: 1001;
+}
+
+.gallery-bottom-actions .gallery-back {
+    position: static;
+}
+
 .project-detail .detail-hero,
 .project-layout,
 .product-layout {
