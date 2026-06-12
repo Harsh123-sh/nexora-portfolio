@@ -522,6 +522,10 @@ if (galleryPrev && galleryNext && gallerySection) {
     }, { passive: true });
 
     gallerySection.addEventListener("pointerdown", (event) => {
+        if (event.target.closest("[data-back-home]")) {
+            return;
+        }
+
         isDraggingGallery = true;
         dragStartX = event.clientX;
         gallerySection.setPointerCapture(event.pointerId);
@@ -545,27 +549,57 @@ if (galleryPrev && galleryNext && gallerySection) {
     });
 }
 
-const closeProjectDetails = () => {
+const isBackHomeButton = (target) => target instanceof Element ? target.closest("[data-back-home]") : null;
+
+const navigateHomeToProjects = () => {
     document.body.classList.remove("case-study-mode", "gallery-mode");
     projectSections.forEach((section) => {
         section.hidden = true;
         section.classList.remove("case-active");
     });
 
-    history.replaceState(null, "", "#cover");
-    document.querySelector("#cover")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    try {
+        history.pushState(null, "", "/");
+        const projectsSection = document.querySelector("#projects");
+
+        if (!projectsSection) {
+            window.location.assign("/");
+            return;
+        }
+
+        requestAnimationFrame(() => {
+            try {
+                projectsSection.scrollIntoView({ behavior: "smooth", block: "start" });
+            } catch (error) {
+                projectsSection.scrollIntoView();
+            }
+        });
+    } catch (error) {
+        window.location.assign("/#projects");
+    }
 };
 
-document.addEventListener("click", (event) => {
-    const backLink = event.target.closest(".case-back, .gallery-back, .apple-back");
+document.addEventListener("pointerdown", (event) => {
+    const backLink = isBackHomeButton(event.target);
 
-    if (!backLink || backLink.getAttribute("href") !== "#cover") {
+    if (!backLink) {
+        return;
+    }
+
+    event.stopPropagation();
+}, true);
+
+document.addEventListener("click", (event) => {
+    const backLink = isBackHomeButton(event.target);
+
+    if (!backLink) {
         return;
     }
 
     event.preventDefault();
     event.stopPropagation();
-    closeProjectDetails();
+    event.stopImmediatePropagation();
+    navigateHomeToProjects();
 }, true);
 
 window.addEventListener("keydown", (event) => {
