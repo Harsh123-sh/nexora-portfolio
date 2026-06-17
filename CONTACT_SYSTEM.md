@@ -20,7 +20,7 @@ This project now includes a production-style contact lead flow:
 
    ```bash
    DATABASE_URL=postgresql://postgres:postgres@your-database-host:5432/nexora_portfolio
-   OWNER_EMAIL=hello@nexoratechnologies.com
+   OWNER_EMAIL=hello.nexora26@gmail.com
    SMTP_HOST=smtp.gmail.com
    SMTP_PORT=587
    SMTP_SECURE=false

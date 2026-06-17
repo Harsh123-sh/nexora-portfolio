@@ -631,7 +631,7 @@ const openInquiryEmail = (payload) => {
     const subject = encodeURIComponent(`New project inquiry from ${payload.name || "website visitor"}`);
     const body = encodeURIComponent(lines.join("\n"));
 
-    window.location.href = `mailto:hello@nexoratechnologies.com?subject=${subject}&body=${body}`;
+    window.location.href = `mailto:hello.nexora26@gmail.com?subject=${subject}&body=${body}`;
 };
 
 const isLocalEnvironment = () => {
@@ -733,7 +733,7 @@ if (contactForm && formStatus) {
                 return;
             }
 
-            formStatus.textContent = error.message || "Something went wrong. Please email hello@nexoratechnologies.com.";
+            formStatus.textContent = error.message || "Something went wrong. Please email hello.nexora26@gmail.com.";
             formStatus.classList.add("is-error");
         } finally {
             submitButton.disabled = false;
