@@ -27,6 +27,19 @@ body.light-mode {
     --panel-strong: rgba(255, 255, 255, 0.92);
     --border: rgba(37, 99, 235, 0.16);
     --shadow: 0 24px 70px rgba(37, 99, 235, 0.16);
+    --card-label-text: #22D3EE;
+    --card-heading-text: #FFFFFF;
+    --card-description-text: #E2E8F0;
+    --card-muted-text: #CBD5E1;
+    --card-number-text: rgba(255, 255, 255, 0.15);
+    --card-badge-bg: rgba(255, 255, 255, 0.12);
+    --card-badge-text: #FFFFFF;
+    --process-label-text: #22D3EE;
+    --process-title-text: #FFFFFF;
+    --process-description-text: #E2E8F0;
+    --process-secondary-text: #CBD5E1;
+    --process-number-text: rgba(255, 255, 255, 0.18);
+    --process-icon-text: #22D3EE;
 }
 
 * {
@@ -57,6 +70,22 @@ body {
 a {
     color: inherit;
     text-decoration: none;
+}
+
+.text-white {
+    color: #FFFFFF;
+}
+
+.text-slate-200 {
+    color: #E2E8F0;
+}
+
+.text-cyan-400 {
+    color: #22D3EE;
+}
+
+.text-slate-300 {
+    color: #CBD5E1;
 }
 
 img {
@@ -3038,19 +3067,65 @@ body.gallery-mode {
     border-radius: 24px;
     min-height: 230px;
     padding: 24px;
+    position: relative;
     transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
 }
 
-.timeline-item span {
-    color: var(--cyan);
+.process-card {
+    --process-label-text: #22D3EE;
+    --process-title-text: #FFFFFF;
+    --process-description-text: #E2E8F0;
+    --process-secondary-text: #CBD5E1;
+    --process-number-text: rgba(255, 255, 255, 0.18);
+    --process-icon-text: #22D3EE;
+
+    background: linear-gradient(145deg, rgba(30, 45, 82, 0.9), rgba(22, 33, 62, 0.78));
+}
+
+.timeline-item span,
+.process-step-label {
+    color: var(--process-label-text, #22D3EE);
     display: block;
     font-weight: 950;
     margin-bottom: 18px;
+    position: relative;
+    z-index: 1;
 }
 
-.timeline-item p {
+.timeline-item h3,
+.process-step-title {
+    color: var(--process-title-text, #FFFFFF);
+    position: relative;
+    z-index: 1;
+}
+
+.timeline-item p,
+.process-step-description {
+    color: var(--process-description-text, #E2E8F0);
     font-size: 0.92rem;
     margin-top: 12px;
+    position: relative;
+    z-index: 1;
+}
+
+.process-secondary {
+    color: var(--process-secondary-text, #CBD5E1);
+}
+
+.process-icon {
+    color: var(--process-icon-text, #22D3EE);
+}
+
+.timeline-item::after {
+    color: var(--process-number-text, rgba(255, 255, 255, 0.18));
+    content: attr(data-step);
+    font-size: 4.2rem;
+    font-weight: 950;
+    line-height: 1;
+    pointer-events: none;
+    position: absolute;
+    right: 18px;
+    top: 14px;
 }
 
 /* Future and team */
@@ -5420,6 +5495,43 @@ h2 {
     box-shadow:
         0 24px 72px rgba(0, 0, 0, 0.28),
         inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+body.light-mode .glass-card h2,
+body.light-mode .glass-card h3,
+body.light-mode .glass-card h4,
+body.light-mode .glass-card strong,
+body.light-mode .glass-card label,
+body.light-mode .timeline-item h3 {
+    color: var(--card-heading-text);
+}
+
+body.light-mode .glass-card p,
+body.light-mode .glass-card li,
+body.light-mode .timeline-item p {
+    color: var(--card-description-text);
+}
+
+body.light-mode .glass-card small,
+body.light-mode .team-profile span {
+    color: var(--card-muted-text);
+}
+
+body.light-mode .card-label,
+body.light-mode .stack-card span,
+body.light-mode .team-profile span,
+body.light-mode .timeline-item span {
+    color: var(--card-label-text);
+}
+
+body.light-mode .tech-pills span,
+body.light-mode .status-badge {
+    background: var(--card-badge-bg);
+    color: var(--card-badge-text);
+}
+
+body.light-mode .service-card::after {
+    color: var(--card-number-text);
 }
 
 .glass-card::before {
