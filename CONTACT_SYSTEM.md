@@ -2,7 +2,7 @@
 
 This project now includes a production-style contact lead flow:
 
-- Public contact form posts to `POST /api/leads`
+- Public contact form posts to Netlify Forms in production and `POST /api/leads` during local Express development
 - Leads are saved in PostgreSQL
 - Site owner receives an email through Nodemailer
 - React admin dashboard is available at `/admin/leads`
@@ -19,7 +19,7 @@ This project now includes a production-style contact lead flow:
 2. Create `.env` from `.env.example` and update:
 
    ```bash
-   DATABASE_URL=postgresql://postgres:postgres@localhost:5432/nexora_portfolio
+   DATABASE_URL=postgresql://postgres:postgres@your-database-host:5432/nexora_portfolio
    OWNER_EMAIL=hello@nexoratechnologies.com
    SMTP_HOST=smtp.gmail.com
    SMTP_PORT=587
@@ -47,8 +47,8 @@ This project now includes a production-style contact lead flow:
    npm start
    ```
 
-The portfolio will be served at `http://localhost:5000`.
-The leads dashboard will be served at `http://localhost:5000/admin/leads`.
+The portfolio will be served from the configured Express host.
+The leads dashboard will be available at `/admin/leads`.
 
 ## Admin Access
 

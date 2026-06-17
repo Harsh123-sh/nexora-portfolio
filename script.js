@@ -634,67 +634,109 @@ const openInquiryEmail = (payload) => {
     window.location.href = `mailto:hello@nexoratechnologies.com?subject=${subject}&body=${body}`;
 };
 
-contactForm.addEventListener("submit", async (event) => {
-    event.preventDefault();
+const isLocalEnvironment = () => {
+    const localPorts = ["5000"];
+    return window.location.protocol === "file:" || localPorts.includes(window.location.port);
+};
 
-    const submitButton = contactForm.querySelector("button[type='submit']");
-    const payload = Object.fromEntries(new FormData(contactForm).entries());
+const createSubmissionError = (response) => {
+    const error = new Error(`Unable to submit inquiry. Server returned ${response.status}.`);
+    error.status = response.status;
+    return error;
+};
 
-    formStatus.textContent = "Submitting your inquiry...";
-    formStatus.classList.remove("is-error");
-    submitButton.disabled = true;
+const parseResponseBody = async (response) => {
+    const responseText = await response.text();
+    let data = {};
+    let parsedJson = false;
 
-    try {
-        const response = await fetch("/api/leads", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(payload)
-        });
-        const responseText = await response.text();
-        let data = {};
-        let parsedJson = false;
-
-        if (responseText) {
-            try {
-                data = JSON.parse(responseText);
-                parsedJson = true;
-            } catch {
-                data = { message: responseText };
-            }
+    if (responseText) {
+        try {
+            data = JSON.parse(responseText);
+            parsedJson = true;
+        } catch {
+            data = { message: responseText };
         }
+    }
 
-        if (!response.ok) {
-            if (data.message) {
-                throw new Error(data.message);
+    return { data, parsedJson, responseText };
+};
+
+const submitLeadToApi = async (payload) => {
+    const response = await fetch("/api/leads", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+    });
+    const { data, parsedJson, responseText } = await parseResponseBody(response);
+
+    if (!response.ok) {
+        const error = createSubmissionError(response);
+        error.message = data.message || error.message;
+        throw error;
+    }
+
+    if (responseText && !parsedJson) {
+        throw new Error("The contact API returned an unexpected response. Please try again from the Express server.");
+    }
+
+    return data;
+};
+
+const submitLeadToNetlify = async (payload) => {
+    const formBody = new URLSearchParams({
+        "form-name": contactForm.getAttribute("name") || "contact-inquiry",
+        ...payload
+    });
+
+    const response = await fetch(contactForm.getAttribute("action") || "/", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: formBody.toString()
+    });
+
+    if (!response.ok) {
+        throw createSubmissionError(response);
+    }
+};
+
+if (contactForm && formStatus) {
+    contactForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const submitButton = contactForm.querySelector("button[type='submit']");
+        const payload = Object.fromEntries(new FormData(contactForm).entries());
+        delete payload["form-name"];
+        delete payload["bot-field"];
+
+        formStatus.textContent = "Submitting your inquiry...";
+        formStatus.classList.remove("is-error");
+        submitButton.disabled = true;
+
+        try {
+            if (isLocalEnvironment()) {
+                await submitLeadToApi(payload);
+            } else {
+                await submitLeadToNetlify(payload);
             }
 
-            if (response.status === 404 || response.status === 405) {
+            formStatus.textContent = "Thank you. Nexora Technologies will review your inquiry shortly.";
+            contactForm.reset();
+        } catch (error) {
+            if (error instanceof TypeError || error.status === 404 || error.status === 405) {
                 openInquiryEmail(payload);
                 formStatus.textContent = "Your email app is opening with the inquiry details. Please send the email to complete submission.";
                 return;
             }
 
-            throw new Error(`Unable to submit inquiry. Server returned ${response.status}.`);
+            formStatus.textContent = error.message || "Something went wrong. Please email hello@nexoratechnologies.com.";
+            formStatus.classList.add("is-error");
+        } finally {
+            submitButton.disabled = false;
         }
-
-        if (responseText && !parsedJson) {
-            throw new Error("The contact API returned an unexpected response. Please try again from the Express server.");
-        }
-
-        formStatus.textContent = "Thank you. Nexora Technologies will review your inquiry shortly.";
-        contactForm.reset();
-    } catch (error) {
-        if (error instanceof TypeError) {
-            openInquiryEmail(payload);
-            formStatus.textContent = "Your email app is opening with the inquiry details. Please send the email to complete submission.";
-            return;
-        }
-
-        formStatus.textContent = error.message || "Something went wrong. Please email hello@nexoratechnologies.com.";
-        formStatus.classList.add("is-error");
-    } finally {
-        submitButton.disabled = false;
-    }
-});
+    });
+}

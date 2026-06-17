@@ -158,7 +158,7 @@ app.get("/admin/leads", (_req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Nexora contact system running at http://localhost:${port}`);
+  console.log(`Nexora contact system running on port ${port}`);
 });
 
 function requireAdmin(req, res, next) {

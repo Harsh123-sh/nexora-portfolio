@@ -1067,7 +1067,12 @@
                     </div>
                 </div>
 
-                <form class="glass-card contact-form reveal" id="contact-form">
+                <form class="glass-card contact-form reveal" id="contact-form" name="contact-inquiry" method="POST"
+                    action="/" data-netlify="true" netlify-honeypot="bot-field">
+                    <input type="hidden" name="form-name" value="contact-inquiry">
+                    <p class="hidden" aria-hidden="true">
+                        <label>Do not fill this out if you are human <input name="bot-field"></label>
+                    </p>
                     <label for="name">Name</label>
                     <input type="text" id="name" name="name" placeholder="Your name" required>
 
